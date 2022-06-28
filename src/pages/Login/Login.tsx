@@ -1,39 +1,111 @@
-import React, { FC } from 'react';
+import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { ReactComponent as IncardLogo } from '../../assets/logo-incard.svg'
-import styled from 'styled-components';
+import TextInput from '../../components/TextInput';
+import {
+  LoginContainer,
+  LoginFormContainer,
+  Title,
+  PlainText,
+  Form,
+  ForgotPasswordText,
+  SubmitBtn,
+  PrimarySpan,
+  ImageContainer,
+  Image
+} from './Login.styles';
+import { useNavigate } from 'react-router-dom';
 
-interface LoginProps {
+const Login: FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [validating, setValidating] = useState('idle');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const navigate = useNavigate()
+  const handleLogin = (e: FormEvent): void => {
+    e.preventDefault()
+    setValidating('validating')
+    console.log(emailError);
+    console.log(passwordError);
 
-}
-
-const LoginContainer = styled.div`
-  padding: 72px 24px;
-`
-
-const Title = styled.h1`
-  color: ${props => props.theme.colors.text};
-  font-size: 32px;
-  font-family: ${props => props.theme.fonts.bold};
-  padding: 0;
-  margin-top: 56px
-`
-const LoginInstruction = styled.p`
-  color: ${props => props.theme.colors.text};
-  font-size: 16px
-`
+  }
 
 
-const Login: FC<LoginProps> = () => {
+
+  useEffect(() => {
+    const validateLogin = () => {
+      if (email.length === 0) {
+        setEmailError('Please enter your email')
+      } else if (email !== 'incard') {
+        setEmailError('Email is not recognised. Please use a registered email')
+      } else {
+        setEmailError('')
+      }
+
+      if (password.length === 0) {
+        setPasswordError('Please enter your password')
+      } else if (password !== 'incard') {
+        setPasswordError('Wrong password. Please try again')
+      } else {
+        setPasswordError('')
+      }
+
+    }
+    if (validating === 'validating') {
+      validateLogin()
+      setValidating('complete')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [validating])
+
+  useEffect(() => {
+    if (validating === 'complete' && emailError === "" && passwordError === "") {
+      localStorage.setItem('loggedIn', 'true')
+      navigate('/')
+    }
+  }, [emailError, passwordError, validating, navigate])
+
+
+
   return (
     <LoginContainer>
-      <IncardLogo />
-      <Title>
-        Hello!
-      </Title>
-      <LoginInstruction>
-        Log in to your incard account.
-      </LoginInstruction>
-
+      <LoginFormContainer>
+        <IncardLogo />
+        <Title>
+          Hello!
+        </Title>
+        <PlainText>
+          Log in to your incard account.
+        </PlainText>
+        <Form onSubmit={handleLogin}>
+          <TextInput
+            label="Email address*"
+            name="email"
+            value={email}
+            setValue={setEmail}
+            error={emailError}
+          />
+          <TextInput
+            label="Password*"
+            name="password"
+            value={password}
+            setValue={setPassword}
+            isPassword
+            error={passwordError}
+          />
+          <ForgotPasswordText>Forgot your password?</ForgotPasswordText>
+          <SubmitBtn type="submit" value="Log in" />
+        </Form>
+        <PlainText>
+          Don't have an account yet? <PrimarySpan>Sign up</PrimarySpan>
+        </PlainText>
+      </LoginFormContainer>
+      <ImageContainer>
+        <Image
+          src={require("../../assets/images/login.jpg")}
+          alt="man typing on laptop"
+        />
+      </ImageContainer>
     </LoginContainer>
   );
 }
