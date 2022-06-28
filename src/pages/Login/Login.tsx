@@ -14,52 +14,33 @@ import {
   Image
 } from './Login.styles';
 import { useNavigate } from 'react-router-dom';
+import { ValidationProgress } from './Login.models';
+import { validateLogin } from './Login.utils';
 
 const Login: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [validating, setValidating] = useState('idle');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [validating, setValidating] = useState(ValidationProgress.IDLE);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+
   const navigate = useNavigate()
+
   const handleLogin = (e: FormEvent): void => {
     e.preventDefault()
-    setValidating('validating')
-    console.log(emailError);
-    console.log(passwordError);
-
+    setValidating(ValidationProgress.VALIDATING)
   }
 
-
-
   useEffect(() => {
-    const validateLogin = () => {
-      if (email.length === 0) {
-        setEmailError('Please enter your email')
-      } else if (email !== 'incard') {
-        setEmailError('Email is not recognised. Please use a registered email')
-      } else {
-        setEmailError('')
-      }
-
-      if (password.length === 0) {
-        setPasswordError('Please enter your password')
-      } else if (password !== 'incard') {
-        setPasswordError('Wrong password. Please try again')
-      } else {
-        setPasswordError('')
-      }
-
-    }
     if (validating === 'validating') {
-      validateLogin()
-      setValidating('complete')
+      validateLogin(email, password, setEmailError, setPasswordError)
+      setValidating(ValidationProgress.COMPLETE)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validating])
 
   useEffect(() => {
-    if (validating === 'complete' && emailError === "" && passwordError === "") {
+    if (validating === ValidationProgress.COMPLETE && emailError === '' && passwordError === '') {
       localStorage.setItem('loggedIn', 'true')
       navigate('/')
     }
@@ -79,22 +60,22 @@ const Login: FC = () => {
         </PlainText>
         <Form onSubmit={handleLogin}>
           <TextInput
-            label="Email address*"
-            name="email"
+            label='Email address*'
+            name='email'
             value={email}
             setValue={setEmail}
             error={emailError}
           />
           <TextInput
-            label="Password*"
-            name="password"
+            label='Password*'
+            name='password'
             value={password}
             setValue={setPassword}
             isPassword
             error={passwordError}
           />
           <ForgotPasswordText>Forgot your password?</ForgotPasswordText>
-          <SubmitBtn type="submit" value="Log in" />
+          <SubmitBtn type='submit' value='Log in' />
         </Form>
         <PlainText>
           Don't have an account yet? <PrimarySpan>Sign up</PrimarySpan>
@@ -102,8 +83,8 @@ const Login: FC = () => {
       </LoginFormContainer>
       <ImageContainer>
         <Image
-          src={require("../../assets/images/login.jpg")}
-          alt="man typing on laptop"
+          src={require('../../assets/images/login.jpg')}
+          alt='man typing on laptop'
         />
       </ImageContainer>
     </LoginContainer>
