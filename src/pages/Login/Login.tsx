@@ -42,6 +42,9 @@ const Login: FC = () => {
   useEffect(() => {
     if (validating === ValidationProgress.COMPLETE && emailError === '' && passwordError === '') {
       localStorage.setItem('loggedIn', 'true')
+      const dateNow = new Date()
+      const expiry = dateNow.getTime() + 600000 // 10 minutes
+      localStorage.setItem('expiry', JSON.stringify(expiry))
       navigate('/')
     }
   }, [emailError, passwordError, validating, navigate])
