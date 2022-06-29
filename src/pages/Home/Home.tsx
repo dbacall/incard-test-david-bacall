@@ -1,6 +1,9 @@
 import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
+import Nav from '../../components/Nav';
+import { MainGrid, NavAndMain } from './Home.styles';
+import { Accounts, Activity, BalanceHistory, Overview } from '../../components/MainGrid';
 
 const Home: FC = () => {
 
@@ -24,7 +27,20 @@ const Home: FC = () => {
     }
   }, [loggedIn, expiry, navigate])
   return (
-    <Header />
+    <>
+      <Header />
+      <NavAndMain>
+        <Nav />
+        <div>
+          <MainGrid>
+            <Overview />
+            <Activity />
+            <Accounts />
+            <BalanceHistory />
+          </MainGrid>
+        </div>
+      </NavAndMain>
+    </>
   );
 }
 
