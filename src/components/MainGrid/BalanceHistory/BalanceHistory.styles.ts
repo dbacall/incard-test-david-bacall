@@ -9,6 +9,7 @@ export const Dropdown = styled.ul<DropdownProps>`
   position: absolute;
   z-index: 1000;
   padding-left: 0;
+  left: 0;
 `
 
 export const DropdownOption = styled.button`
