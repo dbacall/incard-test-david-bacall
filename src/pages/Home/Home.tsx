@@ -26,6 +26,7 @@ const Home: FC = () => {
       navigate('/login')
     }
   }, [loggedIn, expiry, navigate])
+
   return (
     <>
       <Header />
