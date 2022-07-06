@@ -95,3 +95,25 @@ const Login: FC = () => {
 }
 
 export default Login;
+
+// const [email, setEmail] = useState('');
+// const [password, setPassword] = useState('');
+// const [emailError, setEmailError] = useState<null | string>(null);
+// const [passwordError, setPasswordError] = useState<null | string>(null);
+
+// const navigate = useNavigate()
+
+// const handleLogin = (e: FormEvent): void => {
+//   e.preventDefault()
+//   validateLogin(email, password, setEmailError, setPasswordError)
+// }
+
+// useEffect(() => {
+//   if (emailError === '' && passwordError === '') {
+//     localStorage.setItem('loggedIn', 'true')
+//     const dateNow = new Date()
+//     const expiry = dateNow.getTime() + 6000000 // 100 minutes
+//     localStorage.setItem('expiry', JSON.stringify(expiry))
+//     navigate('/')
+//   }
+// }, [emailError, passwordError, navigate])
